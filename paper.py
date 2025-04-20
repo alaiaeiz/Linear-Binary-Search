@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from tabulate import tabulate
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -69,6 +70,11 @@ def main():
         url = "https://docs.google.com/spreadsheets/d/17ru4XAU2NloE9Dfxr2PC1BVcsYkLLT5r7nPSsiOFlvQ/export?format=csv"
         data = pd.read_csv(url, header=0)
         data.columns = data.columns.str.strip()
+
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.width', None)
+        pd.set_option('display.max_colwidth', None)
+
         print("Kolom tersedia:", data.columns.tolist())
     except Exception as e:
         print(f"Terjadi kesalahan saat membaca data: {e}")
@@ -123,9 +129,11 @@ def main():
 
         if hasil:
             for i, h in enumerate(hasil, 1):
-                print(f"{i:<3} {h.get('Judul Paper', ''):<50} | {str(h.get('Tahun Terbit', '')):^10} | {h.get('Nama Penulis', ''):<30}")
-        else:
-            print("Tidak ditemukan hasil yang cocok.")
+                print(f"{'-'*50}")
+                print(f"Data ke-{i}")
+                for kolom in data.columns:
+                    print(f"{kolom:<20}: {h.get(kolom, '-')}")
+        print(f"{'-'*50}") 
 
         input("\nTekan Enter untuk kembali ke menu utama...")
 
